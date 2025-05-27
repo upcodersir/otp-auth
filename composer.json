@@ -1,0 +1,26 @@
+{
+    "name": "upcodersir/otp-auth",
+    "version": "1.0.0",
+    "description": "A Laravel package to send/verify OTP authentication codes",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Upcoders",
+            "email": "info@upcoders.ir"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Upcodersir\\OtpAuth\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Upcodersir\\OtpAuth\\OtpAuthServiceProvider"
+            ]
+        }
+    }
+}
