@@ -36,16 +36,24 @@ class OtpAuthController extends Controller
             'identifier' => 'required',
             'type' => 'required|in:sms,email',
         ]);
-        
-        $otp = OtpAuthService::generateOtp($request->identifier);
-        $this->notifier->sendOtp($request->identifier, $otp, $request->type);
 
-        $data = ['message' => 'OTP sent successfully.'];
+        try {
+            $otp = OtpAuthService::generateOtp($request->identifier);
+            $this->notifier->sendOtp($request->identifier, $otp, $request->type);
 
-        //send event
-        event(new OtpSent($data));
+            $data = ['status' => 'success', 'message' => 'OTP sent successfully.'];
 
-        return response()->json($data);
+            //send event
+            event(new OtpSent($data));
+
+            return response()->json($data, 200);
+
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to send OTP: ' . $e->getMessage(),
+            ], 500);            
+        }
     }
 
     public function verifyOtp(Request $request)
