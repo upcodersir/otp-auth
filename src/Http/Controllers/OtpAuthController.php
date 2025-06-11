@@ -94,7 +94,7 @@ class OtpAuthController extends Controller
                 } else {
                     $userId = DB::table($userTable)->insertGetId([
                         'email' => filter_var($request->identifier, FILTER_VALIDATE_EMAIL) ? $request->identifier : null,
-                        'name' => 'new_user'
+                        'name' => 'new_user',
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
