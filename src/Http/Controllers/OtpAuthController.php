@@ -66,10 +66,19 @@ class OtpAuthController extends Controller
         if (OtpAuthService::validateOtp($request->identifier, $request->otp)) {
             $userTable = config('otp.user_table', 'users');
 
+            $mobileContainingTable = config('otp.mobile_containing_table', 'profile');
+
             $user = DB::table($userTable)->where('email', $request->identifier)
                 ->orWhere('mobile', $request->identifier)
                 ->first();
 
+            if (!$user) {
+                $profile = DB::table($mobileContainingTable)->where('mobile', $request->identifier)->first();
+                if ($profile) {
+                    $userId = $profile->user_id;
+                    $user = DB::table($userTable)->find($userId);
+                }
+            }
 
             if (!$user) {
                 $userId = DB::table($userTable)->insertGetId([
