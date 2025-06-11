@@ -1,6 +1,6 @@
 {
     "name": "upcodersir/otp-auth",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "A Laravel package to send/verify OTP authentication codes",
     "type": "library",
     "license": "MIT",

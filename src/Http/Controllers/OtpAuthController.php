@@ -87,7 +87,7 @@ class OtpAuthController extends Controller
                     $userId = DB::table($userTable)->insertGetId([
                         'email' => filter_var($request->identifier, FILTER_VALIDATE_EMAIL) ? $request->identifier : null,
                         'mobile' => preg_match('/^\d+$/', $request->identifier) ? $request->identifier : null,
-                        'name' => 'new_user'
+                        'name' => 'new_user',
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
