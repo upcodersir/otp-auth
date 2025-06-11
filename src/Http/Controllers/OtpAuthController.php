@@ -76,17 +76,36 @@ class OtpAuthController extends Controller
             } else {
                 $profile = DB::table($mobileContainingTable)->where('mobile', $request->identifier)
                 ->first();
-                $userId = $profile->user_id;
-                $user = DB::table($userTable)->find($userId);
+                if ($profile) {
+                    $userId = $profile->user_id;
+                    $user = DB::table($userTable)->find($userId);
+                }
             }
 
             if (!$user) {
-                $userId = DB::table($userTable)->insertGetId([
-                    'email' => filter_var($request->identifier, FILTER_VALIDATE_EMAIL) ? $request->identifier : null,
-                    'mobile' => preg_match('/^\d+$/', $request->identifier) ? $request->identifier : null,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                if($userTable == $mobileContainingTable) {
+                    $userId = DB::table($userTable)->insertGetId([
+                        'email' => filter_var($request->identifier, FILTER_VALIDATE_EMAIL) ? $request->identifier : null,
+                        'mobile' => preg_match('/^\d+$/', $request->identifier) ? $request->identifier : null,
+                        'name' => 'new_user'
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                } else {
+                    $userId = DB::table($userTable)->insertGetId([
+                        'email' => filter_var($request->identifier, FILTER_VALIDATE_EMAIL) ? $request->identifier : null,
+                        'name' => 'new_user'
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                    $profileId = DB::table($mobileContainingTable)->insertGetId([
+                        'user_id' => $userId,
+                        'mobile' => preg_match('/^\d+$/', $request->identifier) ? $request->identifier : null,
+                        'created_at' => now(),
+                        'updated_at' => now(),                        
+                    ]);
+                }
 
                 $user = DB::table($userTable)->find($userId);
             }
@@ -98,7 +117,7 @@ class OtpAuthController extends Controller
             session()->regenerate();
 
             if (Auth::check()) {
-                return abort(redirect()->route('dashboard'));
+                return abort(redirect()->route(config('otp.redirect_to', 'dashboard')));
             } else {
                 dd('User is not authenticated');
             }

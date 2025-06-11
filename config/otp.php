@@ -9,5 +9,6 @@ return [
   'sms_api_url' => '',
   'sms_api_key' => '',
   'mobile_containing_table' => '',
+  'redirect_to' => '',
   // other options...
 ];
