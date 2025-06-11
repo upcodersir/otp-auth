@@ -79,6 +79,8 @@ class OtpAuthController extends Controller
                 if ($profile) {
                     $userId = $profile->user_id;
                     $user = DB::table($userTable)->find($userId);
+                } else {
+                    $user = null;
                 }
             }
 
