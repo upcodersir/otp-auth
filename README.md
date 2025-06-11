@@ -20,7 +20,10 @@ Running that command, creates a `otp.php` file in your project's config folder, 
   * sms_client
   * sms_api_url
   * sms_api_key
+  * mobile_containing_table
 
+
+If your user's mobile numbers are not in `user_table` table, set `mobile_containing_table` to its name.
 
 Then run `artisan migrate` to migrate tables:
 
