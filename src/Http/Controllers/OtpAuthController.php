@@ -119,7 +119,10 @@ class OtpAuthController extends Controller
             session()->regenerate();
 
             if (Auth::check()) {
-                return abort(redirect()->route(config('otp.redirect_to', 'dashboard')));
+                return response()->json([
+                    'success' => true,
+                    'redirect' => route(config('otp.redirect_to', 'dashboard')),
+                ]);
             } else {
                 dd('User is not authenticated');
             }
